@@ -1,0 +1,366 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+public partial class ApplicationDriver : System.Web.UI.Page
+{
+    public static Employee[] employeeArray = new Employee[3];
+    public static int count = 0;
+
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        //When the program runs initially it should delete all the info in the tables
+        try
+        {
+            //Creates a new sql connection and links the application to the lab 1 database
+            System.Data.SqlClient.SqlConnection sc = new System.Data.SqlClient.SqlConnection();
+            sc.ConnectionString = @"Server =Localhost; Database=Lab1;Trusted_Connection=Yes;";
+            
+        }
+        catch (Exception)
+        {
+            //Shows an error message if there is a problem connecting to the database
+            resultMessage.Text += "Error Clearing Database";
+        }
+
+    }
+
+    protected void btnInsert_Click(object sender, EventArgs e)
+    {
+        //Check that the name doesnt exist in the DB already
+
+
+        //Create the new entry in the array
+        employeeArray[count] = new Employee(int.Parse(txtEmployeeID.Value),txtFirstName.Value, txtLastName.Value, txtMI.Value, txtHouseNum.Value, txtStreet.Value, txtCounty.Value, txtState.Value, txtCountry.Value, txtZip.Value,
+            DateTime.Parse(txtDOB.Value), DateTime.Parse(txtHireDate.Value), DateTime.Parse(txtTerminationDate.Value), Double.Parse(txtSalary.Value), int.Parse(txtManagerID.Value),
+            "John Morrissey", DateTime.Now);
+        
+    }
+
+    protected void btnClear_Click(object sender, EventArgs e)
+    {
+        //Clear the text fields
+        txtFirstName.Value = "";
+        txtLastName.Value = "";
+        txtMI.Value = "";
+        txtDOB.Value = "";
+        txtHouseNum.Value = "";
+        txtStreet.Value = "";
+        txtState.Value = "";
+        txtCounty.Value = "";
+        txtCountry.Value = "";
+        txtZip.Value = "";
+        txtHireDate.Value = "";
+        txtTerminationDate.Value = "";
+        txtSalary.Value = "";
+        txtManagerID.Value = "";
+        txtEmployeeID.Value = "";
+
+    }
+
+    protected void btnCommit_Click(object sender, EventArgs e)
+    {
+
+    }
+
+    protected void btnExit_Click(object sender, EventArgs e)
+    {
+
+    }
+
+    
+    
+}
+
+<%@ Page Language="C#" AutoEventWireup="true" CodeFile="Lab1.aspx.cs" Inherits="ApplicationDriver" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>John Morrissey Lab 1</title>
+
+    <style>
+        
+        #Label1 {
+            font-size: 200%;
+        }
+
+        .formLabel {
+
+        }
+
+        .longInput {
+            width: 30%;
+            
+        }
+
+        .mediumInput {
+            width: 12%;
+            
+        }
+
+        .shortInput {
+            width: 5%;
+            
+        }
+
+        input[type=text] {
+            color: whitesmoke;
+            background-color: midnightblue;
+            border: none;
+            border-radius: 4px;
+        }
+
+        .btn {
+            margin: 5px;
+            border-radius: 4px;
+            background-color: midnightblue;
+            color: whitesmoke;
+        }
+
+        
+        .auto-style1 {
+            width: 206px;
+        }
+
+        
+    </style>
+</head>
+<body>
+    <form id="form1" runat="server">
+    <p>
+    
+        <asp:Label ID="Label1" runat="server" Text="Label" >Employee Information</asp:Label>
+    
+    </p>
+    
+       
+    
+    <!-- This is the table that contains my user inputs 
+        The user information will be seperated into 3 sections-->
+    <table style="width:1000px;"  >
+        <tr>
+            <td class="auto-style1">First Name</td>
+            <td><input id="txtFirstName" runat="server" class="longInput" type="text" /></td>
+        </tr>
+        <tr>
+            <td class="auto-style1">Last Name</td>
+            <td><input id="txtLastName" runat="server" class="longInput" type="text" /></td>
+        </tr>
+        <tr>
+            <td class="auto-style1">MI*</td>
+            <td> <input id="txtMI" runat="server" class="shortInput" type="text" /></td>
+        </tr>
+        <tr>
+            <td class="auto-style1">DOB</td>
+            <td> <input placeholder="YYYY-MM-DD" id="txtDOB" runat="server" class="mediumInput" type="text" /></td>
+        </tr>
+        <tr>
+            <!-- Insert a line break between the first section of employee info -->
+            <td class="auto-style1"><br /></td>
+        </tr>
+
+        <tr>
+            <td class="auto-style1">House Number</td>
+            <td> <input id="txtHouseNum" runat="server" class="mediumInput" type="text" /></td>
+        </tr>
+        <tr>
+            <td class="auto-style1">Street</td>
+            <td> <input id="txtStreet" runat="server" class="longInput" type="text" /></td>
+        </tr>
+        <tr>
+            <td class="auto-style1">County/City</td>
+            <td> <input id="txtCounty" runat="server" class="longInput" type="text" /></td>
+        </tr>
+        <tr>
+            <td class="auto-style1">State Abb</td>
+            <td> <input id="txtState" runat="server" class="shortInput" type="text" /></td>
+        </tr>
+        <tr>
+            <td class="auto-style1">Country Abb</td>
+            <td> <input id="txtCountry" runat="server" class="shortInput" type="text" /></td>
+        </tr>
+        <tr>
+            <td class="auto-style1">Zip Code</td>
+            <td> <input id="txtZip" runat="server" class="mediumInput" type="text" /></td>
+        </tr>
+        <tr>
+            <!-- Insert a line break between the first and second section of employee info -->
+            <td class="auto-style1"><br /></td>
+        </tr>
+
+        <tr>
+            <td class="auto-style1">Hire Date</td>
+            <td> <input id="txtHireDate" runat="server" placeholder="YYYY-MM-DD" class="mediumInput" type="text" /></td>
+        </tr>
+        <tr>
+            <td class="auto-style1">Termination Date*</td>
+            <td> <input id="txtTerminationDate" runat="server" placeholder="YYYY-MM-DD" class="mediumInput" type="text" /></td>
+        </tr>
+        <tr>
+            <td class="auto-style1">Salary</td>
+            <td> <input id="txtSalary" runat="server" placeholder="e.g. 50000" class="mediumInput" type="text" /></td>
+        </tr>
+        <tr>
+            <td class="auto-style1">Employee ID</td>
+            <td> <input id="txtEmployeeID" runat="server" class="shortInput" type="text" /> </td>
+        </tr>
+        <tr>
+            <td class="auto-style1">Manager ID*</td>
+            <td> <input id="txtManagerID" runat="server" class="shortInput" type="text" /></td>
+        </tr>
+        <tr>
+            <td class="auto-style1">Skills</td>
+            <td> <select>
+                    <option value="1">This is a placeholder</option>
+                    <option value="2">This is a second placeholder</option>
+                    <option value="3">This is a third placeholder</option>
+                 </select></td>
+        </tr>
+        
+        
+    </table>
+    <p>*Fields are optional</p>
+    <!-- These are the buttons that provide functionality -->
+    <section>
+        <asp:Button CssClass="btn" ID="btnInsert" runat="server" OnClick="btnInsert_Click" Text="Insert" />
+        <asp:Button CssClass="btn" ID="btnClear" runat="server" OnClick="btnClear_Click" Text="Clear" />
+        <asp:Button CssClass="btn" ID="btnCommit" runat="server" OnClick="btnCommit_Click" Text="Employee Commit" />
+        <asp:Button CssClass="btn" ID="btnExit" runat="server" OnClick="btnExit_Click" Text="Exit" />
+
+
+    </section>
+    </form>
+    <footer>
+        <asp:Label ID="resultMessage" runat="server" ></asp:Label>
+    </footer>
+</body>
+
+    
+</html>
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+/// <summary>
+/// Summary description for Class2
+/// </summary>
+public class Employee
+{
+    public int employeeID;
+    public string fName;
+    public string lName;
+    public string mName;
+    public string houseNum;
+    public string street;
+    public string county;
+    public string state;
+    public string country;
+    public string zip;
+    public DateTime dateOfBirth;
+    public DateTime hireDate;
+    public DateTime terminationDate;
+    public double salary;
+    public int managerID;
+    public string updatedBy;
+    public DateTime updatedDate;
+    public static int count = 0;
+
+    public Employee(int employeeID, string fName, string lName, string mName, string houseNum, string street, string county, string state, string country, string zip,
+        DateTime dateOfBirth, DateTime hireDate, DateTime terminationDate, double salary, int managerID, string updatedBy, DateTime updatedDate)
+    {
+        setEmployeeID(employeeID);
+        setfName(fName);
+        setlName(lName);
+        setmName(mName);
+        setHouseNum(houseNum);
+        setStreet(street);
+        setCounty(county);
+        setState(state);
+        setCountry(country);
+        setZip(zip);
+        setDateOfBirth(dateOfBirth);
+        setHireDate(hireDate);
+        setTerminationDate(terminationDate);
+        setSalary(salary);
+        setManagerID(managerID);
+        setUpdatedBy(updatedBy);
+        setUpdatedDate(updatedDate);
+        count++;
+
+    }
+    public void setEmployeeID(int employeeID)
+    {
+        this.employeeID = employeeID;
+    }
+    public void setfName(string fName)
+    {
+        this.fName = fName;
+    }
+    public void setlName(string lName)
+    {
+        this.lName = lName;
+    }
+    public void setmName(string mName)
+    {
+        this.mName = mName;
+    }
+    public void setHouseNum(string houseNum)
+    {
+        this.houseNum = houseNum;
+    }
+    public void setStreet(string street)
+    {
+        this.street = street;
+    }
+    public void setCounty(string county)
+    {
+        this.county = county;
+    }
+    public void setState(string state)
+    {
+        this.state = state;
+    }
+    public void setCountry(string country)
+    {
+        this.country = country;
+    }
+    public void setZip(string zip)
+    {
+        this.zip = zip;
+    }
+    public void setDateOfBirth(DateTime dateOfBirth)
+    {
+        this.dateOfBirth = dateOfBirth;
+    }
+    public void setHireDate(DateTime hireDate)
+    {
+        this.hireDate = hireDate;
+    }
+    public void setTerminationDate(DateTime terminationDate)
+    {
+        this.terminationDate = terminationDate;
+    }
+    public void setSalary(double salary)
+    {
+        this.salary = salary;
+    }
+    public void setManagerID(int managerID)
+    {
+        this.managerID = managerID;
+    }
+    public void setUpdatedBy(string updatedBy)
+    {
+        this.updatedBy = updatedBy;
+    }
+    public void setUpdatedDate(DateTime updatedDate)
+    {
+        this.updatedDate = updatedDate;
+    }
+}
