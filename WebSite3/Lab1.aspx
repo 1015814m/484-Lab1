@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="Lab1.aspx.cs" Inherits="ApplicationDriver" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="Lab1.aspx.cs" Inherits="ApplicationDriver"  %>
 
 <!DOCTYPE html>
 
@@ -6,6 +6,7 @@
 <head runat="server">
     <title>John Morrissey Lab 1</title>
 
+    
     <style>
         
         #Label1 {
@@ -51,7 +52,21 @@
         }
 
         
+        .auto-style2 {
+            width: 1003px;
+            margin-right: 81px;
+        }
+        .auto-style3 {
+            width: 744px;
+        }
+
+        
     </style>
+
+    <script runat="server">
+
+
+    </script>
 </head>
 <body>
     <form id="form1" runat="server">
@@ -65,22 +80,24 @@
     
     <!-- This is the table that contains my user inputs 
         The user information will be seperated into 3 sections-->
-    <table style="width:1000px;"  >
+    <table class="auto-style2"  >
         <tr>
             <td class="auto-style1">First Name</td>
-            <td><input id="txtFirstName" runat="server" class="longInput" type="text" /></td>
+            <td class="auto-style3"><input id="txtFirstName" runat="server" class="longInput" type="text" /></td>
+            <td><asp:RequiredFieldValidator ID="reqFirstNameInput" ControlToValidate="txtFirstName" Text="(Required)" runat="server" ></asp:RequiredFieldValidator> </td>
         </tr>
         <tr>
             <td class="auto-style1">Last Name</td>
-            <td><input id="txtLastName" runat="server" class="longInput" type="text" /></td>
+            <td class="auto-style3"><input id="txtLastName" runat="server" class="longInput" type="text" /></td>
+            <td><asp:RequiredFieldValidator ID="reqLastNameInput" ControlToValidate="txtLastName" Text="(Required)" runat="server" ></asp:RequiredFieldValidator> </td>
         </tr>
         <tr>
             <td class="auto-style1">MI*</td>
-            <td> <input id="txtMI" runat="server" class="shortInput" type="text" /></td>
+            <td class="auto-style3"> <input id="txtMI" runat="server" class="shortInput" type="text" /></td>
         </tr>
         <tr>
             <td class="auto-style1">DOB</td>
-            <td> <input placeholder="YYYY-MM-DD" id="txtDOB" runat="server" class="mediumInput" type="text" /></td>
+            <td class="auto-style3"> <input placeholder="YYYY-MM-DD" id="txtDOB" runat="server" class="mediumInput" type="text" /></td>
         </tr>
         <tr>
             <!-- Insert a line break between the first section of employee info -->
@@ -89,27 +106,27 @@
 
         <tr>
             <td class="auto-style1">House Number</td>
-            <td> <input id="txtHouseNum" runat="server" class="mediumInput" type="text" /></td>
+            <td class="auto-style3"> <input id="txtHouseNum" runat="server" class="mediumInput" type="text" /></td>
         </tr>
         <tr>
             <td class="auto-style1">Street</td>
-            <td> <input id="txtStreet" runat="server" class="longInput" type="text" /></td>
+            <td class="auto-style3"> <input id="txtStreet" runat="server" class="longInput" type="text" /></td>
         </tr>
         <tr>
             <td class="auto-style1">County/City</td>
-            <td> <input id="txtCounty" runat="server" class="longInput" type="text" /></td>
+            <td class="auto-style3"> <input id="txtCounty" runat="server" class="longInput" type="text" /></td>
         </tr>
         <tr>
-            <td class="auto-style1">State Abb</td>
-            <td> <input id="txtState" runat="server" class="shortInput" type="text" /></td>
+            <td class="auto-style1">State Abb*</td>
+            <td class="auto-style3"> <input id="txtState" runat="server" class="shortInput" type="text" /></td>
         </tr>
         <tr>
             <td class="auto-style1">Country Abb</td>
-            <td> <input id="txtCountry" runat="server" class="shortInput" type="text" /></td>
+            <td class="auto-style3"> <input id="txtCountry" runat="server" class="shortInput" type="text" /></td>
         </tr>
         <tr>
             <td class="auto-style1">Zip Code</td>
-            <td> <input id="txtZip" runat="server" class="mediumInput" type="text" /></td>
+            <td class="auto-style3"> <input id="txtZip" runat="server" class="mediumInput" type="text" /></td>
         </tr>
         <tr>
             <!-- Insert a line break between the first and second section of employee info -->
@@ -118,33 +135,31 @@
 
         <tr>
             <td class="auto-style1">Hire Date</td>
-            <td> <input id="txtHireDate" runat="server" placeholder="YYYY-MM-DD" class="mediumInput" type="text" /></td>
+            <td class="auto-style3"> <input id="txtHireDate" runat="server" placeholder="YYYY-MM-DD" class="mediumInput" type="text" /></td>
         </tr>
         <tr>
             <td class="auto-style1">Termination Date*</td>
-            <td> <input id="txtTerminationDate" runat="server" placeholder="YYYY-MM-DD" class="mediumInput" type="text" /></td>
+            <td class="auto-style3"> <input id="txtTerminationDate" runat="server" placeholder="YYYY-MM-DD" class="mediumInput" type="text" /></td>
         </tr>
         <tr>
             <td class="auto-style1">Salary</td>
-            <td> <input id="txtSalary" runat="server" placeholder="e.g. 50000" class="mediumInput" type="text" /></td>
+            <td class="auto-style3"> <input id="txtSalary" runat="server" placeholder="e.g. 50000" class="mediumInput" type="text" /></td>
         </tr>
         <tr>
             <td class="auto-style1">Employee ID</td>
-            <td> <input id="txtEmployeeID" runat="server" class="shortInput" type="text" /> </td>
+            <td class="auto-style3"> <input id="txtEmployeeID" runat="server" class="shortInput" type="text" /> </td>
         </tr>
         <tr>
             <td class="auto-style1">Manager ID*</td>
-            <td> <input id="txtManagerID" runat="server" class="shortInput" type="text" /></td>
-        </tr>
-        <tr>
-            <td class="auto-style1">Skills</td>
-            <td> <select>
-                    <option value="1">This is a placeholder</option>
-                    <option value="2">This is a second placeholder</option>
-                    <option value="3">This is a third placeholder</option>
-                 </select></td>
+            <td class="auto-style3"> <input id="txtManagerID" runat="server" class="shortInput" type="text" /></td>
         </tr>
         
+        <tr>
+            <td class="auto-style1">Skills</td>
+            <td class="auto-style3"><asp:DropDownList CssClass="longInput" ID="dropDownSkills" runat="server" >
+                </asp:DropDownList >
+            </td>
+        </tr>
         
     </table>
     <p>*Fields are optional</p>
@@ -160,6 +175,7 @@
     </form>
     <footer>
         <asp:Label ID="resultMessage" runat="server" ></asp:Label>
+        
     </footer>
 </body>
 
