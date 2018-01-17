@@ -97,6 +97,11 @@ public partial class ApplicationDriver : System.Web.UI.Page
             insertIntoDB(employeeArray[i]);
             resultMessage.Text += "Committed";
         }
+        for (int a = 0; a < count; a++)
+        {
+            employeeArray[a] = null;
+        }
+        count = 0;
     }
 
     protected void btnExit_Click(object sender, EventArgs e)
