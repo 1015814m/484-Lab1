@@ -5,6 +5,8 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
+
+
 public partial class ApplicationDriver : System.Web.UI.Page
 {
     public static Employee[] employeeArray = new Employee[3];
@@ -13,77 +15,83 @@ public partial class ApplicationDriver : System.Web.UI.Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
+        //On page load gets the information from the DB
         selectFromDB();
-        
-        
     }
 
     protected void btnInsert_Click(object sender, EventArgs e)
     {
-        //Check that the name doesnt exist in the DB already
-        string middleInitial = "";
-        string state = "";
-        DateTime terminationDate = DateTime.MinValue;
-        int managerID = 0;
 
-        //if the text fields are empty then set the values to NULL
-        if (txtMI.Value == "")
+        try
         {
-            middleInitial = "NULL";
+
+            if (checkName(txtFirstName.Value, txtLastName.Value) == false && checkID(int.Parse(txtEmployeeID.Value)) == false)
+            {
+                //Check that the name doesnt exist in the DB already
+                string middleInitial = "";
+                string state = "";
+                DateTime terminationDate = DateTime.MinValue;
+                int managerID = 0;
+
+                //if the text fields are empty then set the values to NULL
+                if (txtMI.Value == "")
+                {
+                    middleInitial = "NULL";
+                }
+                else
+                {
+                    middleInitial = txtMI.Value;
+                }
+                if (txtState.Value == "")
+                {
+                    state = "NULL";
+                }
+                else
+                {
+                    state = txtState.Value;
+                }
+                if (txtTerminationDate.Value == "")
+                {
+                    terminationDate = DateTime.MinValue;
+                }
+                else
+                {
+                    terminationDate = DateTime.Parse(txtTerminationDate.Value);
+                }
+                if (txtManagerID.Value == "")
+                {
+                    managerID = -1;
+                }
+                else
+                {
+                    managerID = int.Parse(txtManagerID.Value);
+                }
+                //Create the new entry in the array
+                employeeArray[count++] = new Employee(int.Parse(txtEmployeeID.Value), txtFirstName.Value, txtLastName.Value, middleInitial, txtHouseNum.Value, txtStreet.Value, txtCounty.Value, state, txtCountry.Value, txtZip.Value,
+                    DateTime.Parse(txtDOB.Value), DateTime.Parse(txtHireDate.Value), terminationDate, Double.Parse(txtSalary.Value), managerID,
+                    "John Morrissey", DateTime.Now);
+                resultMessage.Text += employeeArray[count - 1].FirstName + " " + employeeArray[count - 1].LastName;
+                if (count >= 3)
+                {
+                    btnInsert.Enabled = false;
+                }
+            }
+            else
+            {
+                resultMessage.Text += "This user already exists";
+            }
         }
-        else
+        catch (Exception c)
         {
-            middleInitial = txtMI.Value;
+            resultMessage.Text += c;
         }
-        if (txtState.Value == "")
-        {
-            state = "NULL";
-        }
-        else
-        {
-            state = txtState.Value;
-        }
-        if (txtTerminationDate.Value == "")
-        {
-            terminationDate = DateTime.MinValue;
-        }
-        else
-        {
-            terminationDate = DateTime.Parse(txtTerminationDate.Value);
-        }
-        if (txtManagerID.Value == "")
-        {
-            managerID = -1;
-        }
-        else
-        {
-            managerID = int.Parse(txtManagerID.Value);
-        }
-        //Create the new entry in the array
-        employeeArray[count++] = new Employee(int.Parse(txtEmployeeID.Value),txtFirstName.Value, txtLastName.Value, middleInitial, txtHouseNum.Value, txtStreet.Value, txtCounty.Value, state, txtCountry.Value, txtZip.Value,
-            DateTime.Parse(txtDOB.Value), DateTime.Parse(txtHireDate.Value), terminationDate, Double.Parse(txtSalary.Value), managerID,
-            "John Morrissey", DateTime.Now);
-        resultMessage.Text += " The constructor was called";
+        clearFields();
     }
 
     protected void btnClear_Click(object sender, EventArgs e)
     {
-        //Clear the text fields
-        txtFirstName.Value = "";
-        txtLastName.Value = "";
-        txtMI.Value = "";
-        txtDOB.Value = "";
-        txtHouseNum.Value = "";
-        txtStreet.Value = "";
-        txtState.Value = "";
-        txtCounty.Value = "";
-        txtCountry.Value = "";
-        txtZip.Value = "";
-        txtHireDate.Value = "";
-        txtTerminationDate.Value = "";
-        txtSalary.Value = "";
-        txtManagerID.Value = "";
-        txtEmployeeID.Value = "";
+        //Calls the clear fields method
+        clearFields();
 
     }
 
@@ -92,21 +100,28 @@ public partial class ApplicationDriver : System.Web.UI.Page
         //First delete the previous data from the database
         //Then commit the employee array to the database
         deleteFromDB();
+
         for (int i = 0; i < count; i++)
         {
             insertIntoDB(employeeArray[i]);
+
             resultMessage.Text += "Committed";
         }
         for (int a = 0; a < count; a++)
         {
-            employeeArray[a] = null;
+            Array.Clear(employeeArray, 0, employeeArray.Length);
         }
+        btnInsert.Enabled = true;
         count = 0;
+        clearFields();
+        
+        
     }
 
     protected void btnExit_Click(object sender, EventArgs e)
     {
-        
+        //Exits the program
+        Environment.Exit(0);
     }
 
     private void deleteFromDB()
@@ -199,7 +214,7 @@ public partial class ApplicationDriver : System.Web.UI.Page
             }
             else
             {
-                insert.CommandText += "','" + a.TerminationDate + "','";
+                insert.CommandText += "','" + a.TerminationDate + "',";
             }
             
             insert.CommandText += a.Salary;
@@ -260,6 +275,71 @@ public partial class ApplicationDriver : System.Web.UI.Page
             resultMessage.Text += c.Message;
         }
     }
+
+    protected Boolean checkName(string firstName, string lastName)
+    {
+        //this checks whether the name already exists in the array
+        string arrayName = "";
+        string txtBoxName = "";
+        txtBoxName = firstName.ToUpper() + lastName.ToUpper();
+        Boolean result;
+
+        for (int i = 0; i < count; i++)
+        {
+            arrayName = employeeArray[i].FirstName.ToUpper() + employeeArray[i].LastName.ToUpper();
+            if (arrayName == txtBoxName)
+            {
+                result = true;
+                return result;
+            }
+            
+        }
+
+        return false;
+
+        
+    }
+
+    private Boolean checkID(int id)
+    {
+        //This checks whether the ID number exists in the array
+        for (int i = 0; i < count; i++)
+        {
+            if(id == employeeArray[i].EmployeeID)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void clearFields()
+    {
+        //Clear the text fields
+        txtFirstName.Value = "";
+        txtLastName.Value = "";
+        txtMI.Value = "";
+        txtDOB.Value = "";
+        txtHouseNum.Value = "";
+        txtStreet.Value = "";
+        txtState.Value = "";
+        txtCounty.Value = "";
+        txtCountry.Value = "";
+        txtZip.Value = "";
+        txtHireDate.Value = "";
+        txtTerminationDate.Value = "";
+        txtSalary.Value = "";
+        txtManagerID.Value = "";
+        txtEmployeeID.Value = "";
+
+        txtFirstName.Focus();
+    }
+
+    
+
+    
+    
+    
 
 
 }
