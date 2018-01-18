@@ -4,28 +4,83 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Web.UI.HtmlControls;
 
-
+//John Morrissey Lab 1
 
 public partial class ApplicationDriver : System.Web.UI.Page
 {
     public static Employee[] employeeArray = new Employee[3];
     public static int count = 0;
+    
 
 
     protected void Page_Load(object sender, EventArgs e)
     {
         //On page load gets the information from the DB
         selectFromDB();
+        
+        
+
+
     }
 
     protected void btnInsert_Click(object sender, EventArgs e)
     {
-
+        alertMessage.Text = "";
+        Boolean passBoolean = true;
+        
         try
         {
+            if (checkDate(DateTime.Parse(txtHireDate.Value), DateTime.Parse(txtTerminationDate.Value)) == false)
+            {
+                alertMessage.Text += " Ensure the hire date if before the termination date";
+                passBoolean = false;
+                txtHireDate.Focus();
+            }
+            else if(txtTerminationDate.Value == "")
+            {
+                passBoolean = true;
+            }
+            if (checkName(txtFirstName.Value, txtLastName.Value) == true)
+            {
+                alertMessage.Text += " This user already exists";
+                passBoolean = false;
+                txtFirstName.Focus();
+            }
+            if (checkID(int.Parse(txtEmployeeID.Value)) == true)
+            {
+                alertMessage.Text += " This ID already exists";
+                passBoolean = false;
+                txtEmployeeID.Focus();
+            }
+            if (checkAge(DateTime.Parse(txtDOB.Value)) == false)
+            {
+                alertMessage.Text += " All employees must be atleast 18 years old when they are hired.";
+                passBoolean = false;
+                txtDOB.Focus();
+            }
+            if (txtManagerID.Value != "")
+            {
+                if (checkManagerID(int.Parse(txtManagerID.Value)) == true)
+                {
+                    alertMessage.Text += " Please enter a valid Manager ID.";
+                    passBoolean = false;
+                    txtManagerID.Focus();
+                }
+            }
+            if (checkEntries() == false)
+            {
+                passBoolean = false;
+                alertMessage.Text += " \nPlease ensure all entries are valid.";
+            }
+            if (checkState(txtState.Value) == false)
+            {
+                passBoolean = false;
+                alertMessage.Text += " Please enter a valid state abbreviation. ";
+            }
 
-            if (checkName(txtFirstName.Value, txtLastName.Value) == false && checkID(int.Parse(txtEmployeeID.Value)) == false)
+            if (passBoolean == true)
             {
                 //Check that the name doesnt exist in the DB already
                 string middleInitial = "";
@@ -66,26 +121,29 @@ public partial class ApplicationDriver : System.Web.UI.Page
                 {
                     managerID = int.Parse(txtManagerID.Value);
                 }
+                
+                
+                
                 //Create the new entry in the array
                 employeeArray[count++] = new Employee(int.Parse(txtEmployeeID.Value), txtFirstName.Value, txtLastName.Value, middleInitial, txtHouseNum.Value, txtStreet.Value, txtCounty.Value, state, txtCountry.Value, txtZip.Value,
                     DateTime.Parse(txtDOB.Value), DateTime.Parse(txtHireDate.Value), terminationDate, Double.Parse(txtSalary.Value), managerID,
                     "John Morrissey", DateTime.Now);
-                resultMessage.Text += employeeArray[count - 1].FirstName + " " + employeeArray[count - 1].LastName;
+                alertMessage.Text += "User Created: " + employeeArray[count - 1].FirstName + " " + employeeArray[count - 1].LastName;
                 if (count >= 3)
                 {
                     btnInsert.Enabled = false;
+                    alertMessage.Text += " You cannot enter anymore employees";
                 }
+                
+                
             }
-            else
-            {
-                resultMessage.Text += "This user already exists";
-            }
+            
         }
         catch (Exception c)
         {
             resultMessage.Text += c;
         }
-        clearFields();
+        
     }
 
     protected void btnClear_Click(object sender, EventArgs e)
@@ -97,23 +155,35 @@ public partial class ApplicationDriver : System.Web.UI.Page
 
     protected void btnCommit_Click(object sender, EventArgs e)
     {
+
         //First delete the previous data from the database
         //Then commit the employee array to the database
-        deleteFromDB();
-
-        for (int i = 0; i < count; i++)
+        try
         {
-            insertIntoDB(employeeArray[i]);
+            deleteFromDB();
 
-            resultMessage.Text += "Committed";
+            for (int i = 0; i < count; i++)
+            {
+                insertIntoDB(employeeArray[i]);
+                alertMessage.Text = "";
+                resultMessage.Text += "Committed";
+            }
+            for (int a = 0; a < count; a++)
+            {
+                Array.Clear(employeeArray, 0, employeeArray.Length);
+            }
+            btnInsert.Enabled = true;
+            count = 0;
+            
         }
-        for (int a = 0; a < count; a++)
+        catch (Exception c)
         {
-            Array.Clear(employeeArray, 0, employeeArray.Length);
+            alertMessage.Text = "Please ensure that all information input was correct.";
+            for (int a = 0; a < count; a++)
+            {
+                Array.Clear(employeeArray, 0, employeeArray.Length);
+            }
         }
-        btnInsert.Enabled = true;
-        count = 0;
-        clearFields();
         
         
     }
@@ -278,25 +348,30 @@ public partial class ApplicationDriver : System.Web.UI.Page
 
     protected Boolean checkName(string firstName, string lastName)
     {
-        //this checks whether the name already exists in the array
-        string arrayName = "";
-        string txtBoxName = "";
-        txtBoxName = firstName.ToUpper() + lastName.ToUpper();
-        Boolean result;
-
-        for (int i = 0; i < count; i++)
+        if (count == 0)
         {
-            arrayName = employeeArray[i].FirstName.ToUpper() + employeeArray[i].LastName.ToUpper();
-            if (arrayName == txtBoxName)
-            {
-                result = true;
-                return result;
-            }
-            
+            return false;
         }
 
-        return false;
+            //this checks whether the name already exists in the array
+            string arrayName = "";
+            string txtBoxName = "";
+            txtBoxName = firstName.ToUpper() + lastName.ToUpper();
+            Boolean result;
 
+            for (int i = 0; i < count; i++)
+            {
+                arrayName = employeeArray[i].FirstName.ToUpper() + employeeArray[i].LastName.ToUpper();
+                if (arrayName == txtBoxName)
+                {
+                    result = true;
+                    return result;
+                }
+
+            }
+
+            return false;
+        
         
     }
 
@@ -335,6 +410,131 @@ public partial class ApplicationDriver : System.Web.UI.Page
         txtFirstName.Focus();
     }
 
+    private Boolean checkDate(DateTime firstDate, DateTime secondDate)
+    {
+        int i = secondDate.CompareTo(firstDate);
+        //Is the second date past the first date
+        if (i < 0)
+        {
+            return false;
+        }
+        else if (i == 0)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+    private Boolean checkAge(DateTime dateOfBirth)
+    {
+        if ((dateOfBirth.AddYears(18) <= DateTime.Now))
+        {
+            if (dateOfBirth.AddYears(18) <= DateTime.Parse(txtHireDate.Value))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+            
+        }
+        else 
+        {
+            return false;
+        }
+    }
+
+    
+
+    
+
+    private Boolean checkManagerID(int managerID)
+    {
+        if (count != 0)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                if (managerID != employeeArray[i].EmployeeID)
+                {
+                    continue;
+                }
+                else
+                {
+                    return false;
+                }
+
+            }
+        }
+        else if (count == 0)
+        {
+            if (int.Parse(txtEmployeeID.Value) == int.Parse(txtManagerID.Value))
+            {
+                return false;
+            }
+            else if(txtManagerID.Value == "")
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        return true;
+
+        
+    }
+
+    private Boolean checkEntries()
+    {
+        try
+        {
+            DateTime.Parse(txtDOB.Value);
+            DateTime.Parse(txtHireDate.Value);
+            if (txtTerminationDate.Value != "")
+            {
+                DateTime.Parse(txtTerminationDate.Value);
+            }
+            
+            Double.Parse(txtSalary.Value);
+            if (txtManagerID.Value != "")
+            {
+                int.Parse(txtManagerID.Value);
+            }
+            int.Parse(txtEmployeeID.Value);
+            return true;
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+
+        
+    }
+
+    private Boolean checkState(string stateAbb)
+    {
+        string[] stateArray = new string[] {"AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA",
+            "HI","ID","IL","IN","IA","KS","KY","LA","ME","MD","MA","MI","MN","MS","MO","MT","NE",
+            "NV","NH","NJ","NM","NY","NC","ND","OH","OK","OR","PA","RI","SC","SD","TN","TX","UT",
+            "VT","VA","WA","WV","WI","WY"};
+
+        for (int i = 0; i < stateArray.Length; i++)
+        {
+            if(stateAbb.ToUpper() == stateArray[i])
+            {
+                return true;
+            }
+            
+        }
+
+        return false;
+    }
     
 
     

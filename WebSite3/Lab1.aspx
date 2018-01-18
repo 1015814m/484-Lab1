@@ -60,15 +60,17 @@
             width: 744px;
         }
 
+        .required {
+            color: red;
+        }
+
         
     </style>
-    <script runat="server">
-       
-
-    </script>
+    
     
 </head>
 <body>
+    <!-- John Morrissey Lab 1 -->
     <form id="form1" runat="server">
     <p>
     
@@ -83,21 +85,24 @@
     <table class="auto-style2"  >
         <tr>
             <td class="auto-style1">First Name</td>
-            <td class="auto-style3"><input id="txtFirstName" runat="server" class="longInput" type="text" maxlength="20" onblur="" /></td>
-            <td><asp:RequiredFieldValidator ID="reqFirstNameInput" ControlToValidate="txtFirstName" Text="(Required)" runat="server"  ></asp:RequiredFieldValidator> </td>
+            <td class="auto-style3"><input id="txtFirstName" runat="server" class="longInput" type="text" maxlength="20"  /></td>
+            <td class="required"><asp:RequiredFieldValidator ID="reqFirstNameInput" ControlToValidate="txtFirstName" Text="(Required)" runat="server"  ></asp:RequiredFieldValidator> </td>
         </tr>
+        
         <tr>
             <td class="auto-style1">Last Name</td>
             <td class="auto-style3"><input id="txtLastName" runat="server" class="longInput" type="text" maxlength="30"  /></td>
-            <td><asp:RequiredFieldValidator ID="reqLastNameInput" ControlToValidate="txtLastName" Text="(Required)" runat="server" ></asp:RequiredFieldValidator> </td>
+            <td class="required"><asp:RequiredFieldValidator ID="reqLastNameInput" ControlToValidate="txtLastName" Text="(Required)" runat="server" ></asp:RequiredFieldValidator> </td>
         </tr>
         <tr>
             <td class="auto-style1">MI*</td>
             <td class="auto-style3"> <input id="txtMI"  runat="server" class="shortInput" type="text" maxlength="1" /></td>
+            <td class="required"><asp:RequiredFieldValidator ID="reqMiddleNameInput" ControlToValidate="txtMI" Text="(Required)" runat="server" ></asp:RequiredFieldValidator></td>
         </tr>
         <tr>
             <td class="auto-style1">DOB</td>
             <td class="auto-style3"> <input placeholder="YYYY-MM-DD" id="txtDOB" runat="server" class="mediumInput" type="text" maxlength="10" /></td>
+            <td class="required"><asp:RequiredFieldValidator ID="reqDateOfBirth" ControlToValidate="txtDOB" Text="(Required)" runat="server" ></asp:RequiredFieldValidator></td>
         </tr>
         <tr>
             <!-- Insert a line break between the first section of employee info -->
@@ -107,14 +112,17 @@
         <tr>
             <td class="auto-style1">House Number</td>
             <td class="auto-style3"> <input id="txtHouseNum" runat="server" class="mediumInput" type="text" maxlength="10"/></td>
+            <td class="required"><asp:RequiredFieldValidator ID="reqHouseNum" ControlToValidate="txtHouseNum" Text="(Required)" runat="server" ></asp:RequiredFieldValidator></td>
         </tr>
         <tr>
             <td class="auto-style1">Street</td>
             <td class="auto-style3"> <input id="txtStreet" runat="server" class="longInput" type="text" maxlength="20"/></td>
+            <td class="required"><asp:RequiredFieldValidator ID="reqStreet" ControlToValidate="txtStreet" Text="(Required)" runat="server" ></asp:RequiredFieldValidator></td>
         </tr>
         <tr>
             <td class="auto-style1">County/City</td>
             <td class="auto-style3"> <input id="txtCounty" runat="server" class="longInput" type="text" maxlength="25"/></td>
+            <td class="required"><asp:RequiredFieldValidator ID="reqCounty" ControlToValidate="txtCounty" Text="(Required)" runat="server" ></asp:RequiredFieldValidator></td>
         </tr>
         <tr>
             <td class="auto-style1">State Abb*</td>
@@ -123,10 +131,12 @@
         <tr>
             <td class="auto-style1">Country Abb</td>
             <td class="auto-style3"> <input id="txtCountry" maxlength="2" runat="server" class="shortInput" type="text" /></td>
+            <td class="required"><asp:RequiredFieldValidator ID="reqCountry" ControlToValidate="txtCountry" Text="(Required)" runat="server" ></asp:RequiredFieldValidator></td>
         </tr>
         <tr>
             <td class="auto-style1">Zip Code</td>
             <td class="auto-style3"> <input id="txtZip" runat="server" class="mediumInput" type="text" maxlength="5"/></td>
+            <td class="required"><asp:RequiredFieldValidator ID="reqZip" ControlToValidate="txtZip" Text="(Required)" runat="server" ></asp:RequiredFieldValidator></td>
         </tr>
         <tr>
             <!-- Insert a line break between the first and second section of employee info -->
@@ -136,18 +146,22 @@
         <tr>
             <td class="auto-style1">Hire Date</td>
             <td class="auto-style3"> <input id="txtHireDate" runat="server" placeholder="YYYY-MM-DD" class="mediumInput" type="text" maxlength="10"/></td>
+            <td class="required"><asp:RequiredFieldValidator ID="reqHireDate" ControlToValidate="txtHireDate" Text="(Required)" runat="server" ></asp:RequiredFieldValidator></td>
         </tr>
         <tr>
             <td class="auto-style1">Termination Date*</td>
             <td class="auto-style3"> <input id="txtTerminationDate" runat="server" placeholder="YYYY-MM-DD" class="mediumInput" type="text" maxlength="10"/></td>
+
         </tr>
         <tr>
             <td class="auto-style1">Salary</td>
             <td class="auto-style3"> <input id="txtSalary" runat="server" placeholder="e.g. 50000" class="mediumInput" type="text" /></td>
+            <td class="required"><asp:RequiredFieldValidator ID="reqSalary" ControlToValidate="txtSalary" Text="(Required)" runat="server" ></asp:RequiredFieldValidator></td>
         </tr>
         <tr>
             <td class="auto-style1">Employee ID</td>
             <td class="auto-style3"> <input id="txtEmployeeID" runat="server" class="shortInput" type="text" /> </td>
+            <td class="required"><asp:RequiredFieldValidator ID="reqEmployeeID" ControlToValidate="txtEmployeeID" Text="(Required)" runat="server" ></asp:RequiredFieldValidator></td>
         </tr>
         <tr>
             <td class="auto-style1">Manager ID*</td>
@@ -168,13 +182,14 @@
         <asp:Button CssClass="btn" ID="btnInsert" runat="server" OnClick="btnInsert_Click" Text="Insert"  />
         <asp:Button CssClass="btn" ID="btnClear" runat="server" OnClick="btnClear_Click" Text="Clear" />
         <asp:Button CssClass="btn" ID="btnCommit" runat="server" OnClick="btnCommit_Click" Text="Employee Commit" />
-        <asp:Button CssClass="btn" ID="btnExit" runat="server" OnClick="btnExit_Click" Text="Exit"  />
+        <asp:Button CssClass="btn" ID="btnExit" runat="server" OnClick="btnExit_Click" Text="Exit"  formnovalidate=""/>
 
 
     </section>
     </form>
     <footer>
-        <asp:Label ID="resultMessage" runat="server" ></asp:Label>
+        <asp:Label ID="resultMessage" runat="server" visible="false"></asp:Label>
+        <asp:Label ID="alertMessage" runat="server" CssClass="required"></asp:Label>
         
     </footer>
 </body>
